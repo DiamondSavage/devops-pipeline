@@ -80,14 +80,6 @@ resource "aws_security_group" "allow_web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description = "Flask"
-    from_port   = 5000
-    to_port     = 5000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port        = 0
     to_port          = 0
@@ -101,7 +93,7 @@ resource "aws_security_group" "allow_web" {
   }
 }
 
-resource "aws_eip" "lb" {
+resource "aws_eip" "web" {
   instance = aws_instance.web.id
   domain   = "vpc"
 }
@@ -109,32 +101,60 @@ resource "aws_eip" "lb" {
 resource "aws_instance" "web" {
   ami                         = "ami-0224ce6f9504665ee"
   instance_type               = "t3.micro"
-  availability_zone           = "eu-west-2c"
   subnet_id                   = aws_subnet.subnet1.id
+  availability_zone           = "eu-west-2c"
   vpc_security_group_ids      = [aws_security_group.allow_web.id]
   associate_public_ip_address = true
   key_name                    = "main-key"
 
   user_data = <<-EOF
 #!/bin/bash
+
 apt update -y
 apt install docker.io -y
 
 systemctl enable docker
 systemctl start docker
 
+apt install nginx -y
+
+systemctl enable nginx
+systemctl start nginx
+
 docker pull abdallahhegazy/devops-pipeline:latest
 
 docker run -d \
   --name flask \
-  -p 5000:5000 \
   --restart unless-stopped \
+  -p 5000:5000 \
   -e APP_VERSION=1.0.0 \
   -e ENVIRONMENT=production \
   abdallahhegazy/devops-pipeline:latest
+
+cat > /etc/nginx/sites-available/default << 'NGINXCONF'
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+}
+NGINXCONF
+
+systemctl restart nginx
+
 EOF
 
   tags = {
     Name = "web-server"
   }
+}
+
+output "public_ip" {
+  value = aws_eip.web.public_ip
 }
