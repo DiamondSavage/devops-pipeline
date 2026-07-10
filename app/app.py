@@ -1,39 +1,59 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import socket
-import datetime
 import os
+import platform
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 app = Flask(__name__)
 
-APP_VERSION = os.getenv("APP_VERSION", "1.0.0")
-ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
+APP_VERSION = os.getenv("APP_VERSION", "2.0.0")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "Production")
+
 
 @app.route("/")
 def home():
-    return f"""
-    <h1>🚀 DevOps Pipeline Project</h1>
-    <hr>
-    <p><strong>Hostname:</strong> {socket.gethostname()}</p>
-    <p><strong>Current Time (UTC):</strong> {datetime.datetime.utcnow()}</p>
-    <p><strong>Version:</strong> {APP_VERSION}</p>
-    <p><strong>Environment:</strong> {ENVIRONMENT}</p>
-    """
+
+    egypt_time = datetime.now(
+        ZoneInfo("Africa/Cairo")
+    ).strftime("%Y-%m-%d %H:%M:%S")
+
+    return render_template(
+        "index.html",
+        hostname=socket.gethostname(),
+        version=APP_VERSION,
+        environment=ENVIRONMENT,
+        current_time=egypt_time,
+        python_version=platform.python_version(),
+        operating_system=platform.system(),
+    )
+
 
 @app.route("/health")
 def health():
+
     return jsonify({
-        "status": "healthy",
-        "timestamp": str(datetime.datetime.utcnow())
+        "status": "Healthy",
+        "time": datetime.now(
+            ZoneInfo("Africa/Cairo")
+        ).strftime("%Y-%m-%d %H:%M:%S")
     })
+
 
 @app.route("/info")
 def info():
+
     return jsonify({
         "hostname": socket.gethostname(),
-        "version": APP_VERSION,
         "environment": ENVIRONMENT,
-        "time": str(datetime.datetime.utcnow())
+        "version": APP_VERSION,
+        "python": platform.python_version(),
+        "os": platform.system(),
+        "time": datetime.now(
+            ZoneInfo("Africa/Cairo")
+        ).strftime("%Y-%m-%d %H:%M:%S")
     })
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DevOps Pipeline</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+   <div class="container">
+
+    <h1>🚀 DevOps Full Pipeline</h1>
+
+    <p class="subtitle">
+        Built by Abdallah Hegazy
+    </p>
+
+    <div id="statusBox" class="status online">
+    🟢 System Online
+    </div>
+
+    <div class="grid">
+
+        <div class="card">
+            <h2>🖥 Hostname</h2>
+            <p>{{ hostname }}</p>
+        </div>
+
+        <div class="card">
+            <h2>🌍 Environment</h2>
+            <p>{{ environment }}</p>
+        </div>
+
+        <div class="card">
+            <h2>📦 Version</h2>
+            <p>{{ version }}</p>
+        </div>
+
+        <div class="card">
+            <h2>🐍 Python</h2>
+            <p>{{ python_version }}</p>
+        </div>
+
+        <div class="card">
+            <h2>💻 Operating System</h2>
+            <p>{{ operating_system }}</p>
+        </div>
+
+        <div class="card">
+            <h2>🕒 Egypt Time</h2>
+            <p id="clock">{{ current_time }}</p>
+        </div>
+
+    </div>
+
+    <h2 class="section-title">Tech Stack</h2>
+
+    <div class="tech-stack">
+
+        <div class="badge">🐧 Linux</div>
+        <div class="badge">🐳 Docker</div>
+        <div class="badge">⚙ GitHub Actions</div>
+        <div class="badge">🏗 Terraform</div>
+        <div class="badge">☁ AWS</div>
+        <div class="badge">🌐 Nginx</div>
+        <div class="badge">🐍 Flask</div>
+        <div class="badge">☁ EC2</div>
+
+    </div>
+
+    <h2 class="section-title">Infrastructure</h2>
+
+<div class="grid">
+
+<div class="card">
+<h2>☁ Cloud</h2>
+<p>AWS EC2</p>
+</div>
+
+<div class="card">
+<h2>🏗 Infrastructure</h2>
+<p>Terraform</p>
+</div>
+
+<div class="card">
+<h2>🌐 Reverse Proxy</h2>
+<p>Nginx</p>
+</div>
+
+<div class="card">
+<h2>🐳 Containers</h2>
+<p>Docker</p>
+</div>
+
+<div class="card">
+<h2>⚙ CI/CD</h2>
+<p>GitHub Actions</p>
+</div>
+
+<div class="card">
+<h2>🐍 Backend</h2>
+<p>Flask</p>
+</div>
+
+</div>
+
+
+<h2 class="section-title">
+My DevOps Journey
+</h2>
+
+<div class="grid">
+
+<div class="card">
+Linux ✅
+</div>
+
+<div class="card">
+Networking ✅
+</div>
+
+<div class="card">
+Git ✅
+</div>
+
+<div class="card">
+Docker ✅
+</div>
+
+<div class="card">
+Docker Compose ✅
+</div>
+
+<div class="card">
+GitHub Actions ✅
+</div>
+
+<div class="card">
+AWS ✅
+</div>
+
+<div class="card">
+Terraform ✅
+</div>
+
+<div class="card">
+Nginx ✅
+</div>
+
+<div class="card">
+Kubernetes ⏳
+</div>
+
+</div>
+
+    <div class="buttons">
+
+        <button id="healthBtn">
+            🩺 Health Check
+        </button>
+
+        <button id="infoBtn">
+            ℹ API Information
+        </button>
+
+    </div>
+
+    <div id="result"></div>
+
+    <footer>
+
+       <h3>Built by Abdallah Hegazy</h3>
+
+<p>
+DevOps Engineer Journey
+</p>
+
+<br>
+
+<a href="YOUR_GITHUB_LINK">
+<button>
+GitHub
+</button>
+</a>
+
+<a href="YOUR_DOCKERHUB_LINK">
+<button>
+Docker Hub
+</button>
+</a>
+
+    </footer>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
